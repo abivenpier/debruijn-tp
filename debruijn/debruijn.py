@@ -131,10 +131,18 @@ def solve_out_tips(graph, ending_nodes):
     pass
 
 def get_starting_nodes(graph):
-    pass
+	starting_nodes = []
+	for i in list(graph.nodes):
+		if not(any(graph.predecessors(i))):
+			starting_nodes.append(i)
+	return starting_nodes
 
 def get_sink_nodes(graph):
-    pass
+	sink_nodes = []
+	for i in list(graph.nodes):
+		if not(any(graph.successors(i))):
+			sink_nodes.append(i)
+	return sink_nodes
 
 def get_contigs(graph, starting_nodes, ending_nodes):
     pass
