@@ -105,10 +105,13 @@ def build_graph(kmer_dict):
 
 
 def remove_paths(graph, path_list, delete_entry_node, delete_sink_node):
-    pass
+	for path in path_list:
+		graph.remove_nodes_from(path[1-int(delete_entry_node):len(path)-(1-int(delete_sink_node))])
+	return graph
 
 def std(data):
-    pass
+	return statistics.stdev(data)
+    
 
 
 def select_best_path(graph, path_list, path_length, weight_avg_list, 
@@ -116,7 +119,12 @@ def select_best_path(graph, path_list, path_length, weight_avg_list,
     pass
 
 def path_average_weight(graph, path):
-    pass
+	poids = 0
+	for i in range(len(path)-1):
+		poids += graph[path[i]][path[i+1]]["weight"]
+	return poids/(len(path)-1)
+
+		
 
 def solve_bubble(graph, ancestor_node, descendant_node):
     pass
@@ -145,11 +153,21 @@ def get_sink_nodes(graph):
 	return sink_nodes
 
 def get_contigs(graph, starting_nodes, ending_nodes):
-    pass
+	contigs = []
+	for starting_node in starting_nodes:
+		for ending_node in ending_nodes:
+			for path in nx.all_simple_paths(graph, starting_node,ending_node):
+				contig = path[0] + "".join([i[-1] for i in path[1:]])
+				contigs.append((contig,len(contig)))
+	return contigs
+
+									
 
 def save_contigs(contigs_list, output_file):
-    pass
-
+	with open(output_file, 'wt') as output_f:
+		for k, contig in enumerate(contigs_list):
+			output_f.write(f">contig_{k} len={contig[1]}\n")
+			output_f.write(f"{fill(contig[0])}\n")
 
 def fill(text, width=80):
     """Split text with a line return to respect fasta format"""
